@@ -58,6 +58,10 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
   const getActivePlayer = () => activePlayer;
 
+  const printNewRound = () => {
+    Gameboard.printBoard();
+    console.log(`Player ${getActivePlayer().name}'s turn`);
+  };
   const switchPlayerTurn = () =>
     (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
 
@@ -65,17 +69,43 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     console.log(`Player ${getActivePlayer().name} is placing their mark`);
     Gameboard.placeMark(row, column, getActivePlayer().mark);
 
-    switchPlayerTurn();
+    determineWinner();
 
-    // TODO: Determine the winner after each round
+    switchPlayerTurn();
+    printNewRound();
+  };
+
+  printNewRound(); // Initial game message
+
+  const determineWinner = () => {
+    // Check 3 consecutive marks horizontally, vertically, and diagonally
+
+    // check each row then iterate through each col if there are 3 consecutive marks
+    const checkHorizontally = () => {
+      for (let row = 0; row < board.length; row++) {
+        let col = 0;
+        if (
+          board[row][col].getValue() === getActivePlayer().mark &&
+          board[row][col + 1].getValue() === getActivePlayer().mark &&
+          board[row][col + 2].getValue() === getActivePlayer().mark
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (checkHorizontally()) {
+      console.log(`Player ${getActivePlayer().name} wins!`);
+    }
   };
 
   return { getActivePlayer, playRound };
 }
 
-Gameboard.printBoard();
 const controller = GameController("Player 1", "Player 2");
-controller.playRound(0, 1);
 controller.playRound(0, 0);
 controller.playRound(1, 1);
-Gameboard.printBoard();
+controller.playRound(0, 2);
+controller.playRound(1, 2);
+controller.playRound(0, 1);
