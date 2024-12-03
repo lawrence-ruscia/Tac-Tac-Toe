@@ -46,7 +46,36 @@ function Cell() {
   return { addMarkToCell, getValue };
 }
 
+function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
+  const board = Gameboard.getBoard();
+
+  const players = [
+    { name: playerOne, mark: "X" },
+    { name: playerTwo, mark: "O" },
+  ];
+
+  let activePlayer = players[0];
+
+  const getActivePlayer = () => activePlayer;
+
+  const switchPlayerTurn = () =>
+    (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
+
+  const playRound = (row, column) => {
+    console.log(`Player ${getActivePlayer().name} is placing their mark`);
+    Gameboard.placeMark(row, column, getActivePlayer().mark);
+
+    switchPlayerTurn();
+
+    // TODO: Determine the winner after each round
+  };
+
+  return { getActivePlayer, playRound };
+}
+
 Gameboard.printBoard();
-Gameboard.placeMark(0, 1, "X");
-Gameboard.placeMark(0, 0, "O");
+const controller = GameController("Player 1", "Player 2");
+controller.playRound(0, 1);
+controller.playRound(0, 0);
+controller.playRound(1, 1);
 Gameboard.printBoard();
