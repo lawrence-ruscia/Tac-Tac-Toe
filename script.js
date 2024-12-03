@@ -84,7 +84,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     // iterate each row then, checkthrough each col for 3 consecutive marks
     const checkHorizontally = () => {
       for (let row = 0; row < board.length; row++) {
-        let col = 0;
+        const col = 0;
         if (
           board[row][col].getValue() === playerMark &&
           board[row][col + 1].getValue() === playerMark &&
@@ -100,7 +100,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     const checkVertically = () => {
       const rowLength = board[0].length;
       for (let col = 0; col < rowLength; col++) {
-        let row = 0;
+        const row = 0;
         if (
           board[row][col].getValue() === playerMark &&
           board[row + 1][col].getValue() === playerMark &&
@@ -112,7 +112,31 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       return false;
     };
 
-    if (checkHorizontally() || checkVertically()) {
+    const checkDiagonally = () => {
+      function checkTopLeftToBottomRight() {
+        const row = 0;
+        const col = 0;
+        return (
+          board[row][col].getValue() === playerMark &&
+          board[row + 1][col + 1].getValue() === playerMark &&
+          board[row + 2][col + 2].getValue() === playerMark
+        );
+      }
+
+      function checkTopRightToBottomLeft() {
+        const row = 0;
+        const col = 2; // start at the last column
+        return (
+          board[row][col].getValue() === playerMark &&
+          board[row + 1][col - 1].getValue() === playerMark &&
+          board[row + 2][col - 2].getValue() === playerMark
+        );
+      }
+
+      return checkTopLeftToBottomRight() || checkTopRightToBottomLeft();
+    };
+
+    if (checkHorizontally() || checkVertically() || checkDiagonally()) {
       console.log(`${getActivePlayer().name} wins!`);
     }
   };
@@ -121,7 +145,6 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 }
 
 const controller = GameController("Human", "Robot");
-controller.playRound(0, 1);
-controller.playRound(1, 1);
-controller.playRound(0, 0);
 controller.playRound(0, 2);
+controller.playRound(1, 1);
+controller.playRound(2, 0);
