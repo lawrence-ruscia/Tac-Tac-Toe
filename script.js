@@ -60,34 +60,35 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
   const printNewRound = () => {
     Gameboard.printBoard();
-    console.log(`Player ${getActivePlayer().name}'s turn`);
+    console.log(`${getActivePlayer().name}'s turn`);
   };
   const switchPlayerTurn = () =>
     (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
 
   const playRound = (row, column) => {
-    console.log(`Player ${getActivePlayer().name} is placing their mark`);
+    console.log(`${getActivePlayer().name} is placing their mark`);
     Gameboard.placeMark(row, column, getActivePlayer().mark);
 
     determineWinner();
 
-    switchPlayerTurn();
+    // switchPlayerTurn();
     printNewRound();
   };
 
   printNewRound(); // Initial game message
 
   const determineWinner = () => {
+    const playerMark = getActivePlayer().mark;
     // Check 3 consecutive marks horizontally, vertically, and diagonally
 
-    // check each row then iterate through each col if there are 3 consecutive marks
+    // iterate each row then, checkthrough each col for 3 consecutive marks
     const checkHorizontally = () => {
       for (let row = 0; row < board.length; row++) {
         let col = 0;
         if (
-          board[row][col].getValue() === getActivePlayer().mark &&
-          board[row][col + 1].getValue() === getActivePlayer().mark &&
-          board[row][col + 2].getValue() === getActivePlayer().mark
+          board[row][col].getValue() === playerMark &&
+          board[row][col + 1].getValue() === playerMark &&
+          board[row][col + 2].getValue() === playerMark
         ) {
           return true;
         }
@@ -95,17 +96,32 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       return false;
     };
 
-    if (checkHorizontally()) {
-      console.log(`Player ${getActivePlayer().name} wins!`);
+    // iterate each column, then check each row for 3 consecutive marks
+    const checkVertically = () => {
+      const rowLength = board[0].length;
+      for (let col = 0; col < rowLength; col++) {
+        let row = 0;
+        if (
+          board[row][col].getValue() === playerMark &&
+          board[row + 1][col].getValue() === playerMark &&
+          board[row + 2][col].getValue() === playerMark
+        ) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (checkHorizontally() || checkVertically()) {
+      console.log(`${getActivePlayer().name} wins!`);
     }
   };
 
   return { getActivePlayer, playRound };
 }
 
-const controller = GameController("Player 1", "Player 2");
-controller.playRound(0, 0);
-controller.playRound(1, 1);
-controller.playRound(0, 2);
-controller.playRound(1, 2);
+const controller = GameController("Human", "Robot");
 controller.playRound(0, 1);
+controller.playRound(1, 1);
+controller.playRound(0, 0);
+controller.playRound(0, 2);
