@@ -11,6 +11,8 @@ const Gameboard = (() => {
     }
   }
 
+  const getBoard = () => board;
+
   const placeMark = (row, col, playerMark) => {
     // check if the cell is empty, only then will it add the mark
     if (board[row][col].getValue() === "E") {
@@ -25,7 +27,7 @@ const Gameboard = (() => {
     console.log(boardWithCellValues);
   };
 
-  return { placeMark, printBoard };
+  return { getBoard, placeMark, printBoard };
 })();
 
 /*
