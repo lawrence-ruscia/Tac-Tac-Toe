@@ -71,7 +71,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
     determineWinner();
 
-    // switchPlayerTurn();
+    switchPlayerTurn();
     printNewRound();
   };
 
@@ -81,7 +81,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     const playerMark = getActivePlayer().mark;
     // Check 3 consecutive marks horizontally, vertically, and diagonally
 
-    // iterate each row then, checkthrough each col for 3 consecutive marks
+    // iterate each row then, check through each col for 3 consecutive marks
     const checkHorizontally = () => {
       for (let row = 0; row < board.length; row++) {
         const col = 0;
@@ -112,6 +112,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       return false;
     };
 
+    // checks for diagonal marks (top-left to bottom-right and top-right to bottom-left)
     const checkDiagonally = () => {
       function checkTopLeftToBottomRight() {
         const row = 0;
@@ -136,8 +137,20 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       return checkTopLeftToBottomRight() || checkTopRightToBottomLeft();
     };
 
+    const checkTie = () => {
+      // check if all cells are occupied
+      const boardWithCellValues = () =>
+        board.map((row) => row.filter((cell) => cell.getValue() !== "E"));
+
+      return boardWithCellValues.length === 0;
+    };
+
     if (checkHorizontally() || checkVertically() || checkDiagonally()) {
       console.log(`${getActivePlayer().name} wins!`);
+    }
+
+    if (checkTie()) {
+      console.log("Draw!");
     }
   };
 
@@ -146,5 +159,11 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
 const controller = GameController("Human", "Robot");
 controller.playRound(0, 2);
+controller.playRound(0, 0);
 controller.playRound(1, 1);
+controller.playRound(0, 1);
+controller.playRound(1, 0);
+controller.playRound(1, 2);
+controller.playRound(2, 1);
 controller.playRound(2, 0);
+controller.playRound(2, 2);
