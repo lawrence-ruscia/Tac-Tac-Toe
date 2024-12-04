@@ -59,12 +59,13 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
   const getActivePlayer = () => activePlayer;
 
+  const switchPlayerTurn = () =>
+    (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
+
   const printNewRound = () => {
     Gameboard.printBoard();
     console.log(`${getActivePlayer().name}'s turn`);
   };
-  const switchPlayerTurn = () =>
-    (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
 
   const playRound = (row, column) => {
     console.log(`${getActivePlayer().name} is placing their mark`);
@@ -150,7 +151,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       console.log(`${getActivePlayer().name} wins!`);
     }
 
-    // TODO: FIX Draw keeps printing when playing using the UI
+    // TODO: FIXDraw keeps printing when playing using the UI
     if (checkTie()) {
       // console.log("Draw!");
     }
@@ -159,18 +160,20 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
   return { getActivePlayer, playRound, getBoard };
 }
 
-function ScreenController() {
-  const controller = GameController();
+function ScreenController(gameController) {
+  const controller = gameController;
   const playerTurnDiv = document.querySelector(".turn");
   const winnerDiv = document.querySelector(".winner");
   const boardDiv = document.querySelector(".board");
 
-  const board = controller.getBoard();
-  const activePlayer = controller.getActivePlayer();
-
   const updateScreen = () => {
     // clear board
     boardDiv.innerHTML = "";
+
+    // get the newest version of the board and player turn
+    const board = controller.getBoard();
+    const activePlayer = controller.getActivePlayer();
+
     playerTurnDiv.textContent = activePlayer.name;
     board.forEach((row, rowIndex) => {
       const rowDiv = document.createElement("div");
@@ -203,7 +206,6 @@ function ScreenController() {
 
   updateScreen();
 }
-const controller = GameController("Human", "Robot");
 // controller.playRound(0, 2);
 // controller.playRound(0, 0);
 // controller.playRound(1, 1);
@@ -213,4 +215,5 @@ const controller = GameController("Human", "Robot");
 // controller.playRound(2, 1);
 // controller.playRound(2, 0);
 // controller.playRound(2, 2);
-ScreenController();
+const controller = new GameController("Human", "Robot");
+ScreenController(controller);
