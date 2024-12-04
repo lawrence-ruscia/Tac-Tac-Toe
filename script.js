@@ -242,13 +242,4 @@ function ScreenController() {
 
   updateScreen();
 }
-// controller.playRound(0, 2);
-// controller.playRound(0, 0);
-// controller.playRound(1, 1);
-// controller.playRound(0, 1);
-// controller.playRound(1, 0);
-// controller.playRound(1, 2);
-// controller.playRound(2, 1);
-// controller.playRound(2, 0);
-// controller.playRound(2, 2);
 ScreenController();
