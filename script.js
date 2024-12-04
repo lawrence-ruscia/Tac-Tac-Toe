@@ -67,17 +67,21 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     console.log(`${getActivePlayer().name}'s turn`);
   };
 
-  let winner = null;
-  const setWinner = (winnerName) => (winner = winnerName);
-  const getWinner = () => winner;
+  const gameState = (() => {
+    let result = null;
+    const setResult = (roundResult) => (result = roundResult);
+    const getResult = () => result;
+
+    return { setResult, getResult };
+  })();
 
   const playRound = (row, column) => {
     console.log(`${getActivePlayer().name} is placing their mark`);
     Gameboard.placeMark(row, column, getActivePlayer().mark);
 
-    let winnerName = determineWinner();
-    if (winnerName) {
-      setWinner(winnerName);
+    const result = determineResult();
+    if (result) {
+      gameState.setResult(result);
     }
 
     switchPlayerTurn();
@@ -86,7 +90,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
   printNewRound(); // Initial game message
 
-  const determineWinner = () => {
+  const determineResult = () => {
     const playerMark = getActivePlayer().mark;
     // Check 3 consecutive marks horizontally, vertically, and diagonally
 
@@ -147,31 +151,36 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     };
 
     const checkTie = () => {
-      // check if all cells are occupied
-      const boardWithCellValues = () =>
-        board.map((row) => row.filter((cell) => cell.getValue() !== "E"));
+      // combine all row cells into a single array
+      const allCells = board.flat();
 
-      return boardWithCellValues.length === 0;
+      // if all cells are occupied the game is a tie
+      return allCells.every((cell) => cell.getValue() !== "E");
     };
 
     if (checkHorizontally() || checkVertically() || checkDiagonally()) {
       console.log(`${getActivePlayer().name} wins!`);
-      return getActivePlayer().name;
+      return `${getActivePlayer().name} wins!`;
     }
 
-    // TODO: FIX Draw keeps printing when playing using the UI
     if (checkTie()) {
-      // console.log("Draw!");
+      console.log("Draw!");
+      return "Draw!";
     }
   };
 
-  return { getActivePlayer, playRound, getBoard, getWinner };
+  return {
+    getActivePlayer,
+    playRound,
+    getBoard,
+    getResult: gameState.getResult,
+  };
 }
 
 function ScreenController() {
   const controller = GameController("Human", "Robot");
   const playerTurnDiv = document.querySelector(".turn");
-  const winnerDiv = document.querySelector(".winner");
+  const roundResultDiv = document.querySelector(".result");
   const boardDiv = document.querySelector(".board");
 
   const updateScreen = () => {
@@ -181,10 +190,10 @@ function ScreenController() {
     // get the newest version of the board and player turn
     const board = controller.getBoard();
     const activePlayer = controller.getActivePlayer();
-    const winner = controller.getWinner();
+    const roundResult = controller.getResult();
 
-    if (winner) {
-      winnerDiv.textContent = `${winner} wins!`;
+    if (roundResult) {
+      roundResultDiv.textContent = roundResult;
     } else {
       playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
     }
