@@ -17,7 +17,10 @@ const Gameboard = (() => {
     // check if the cell is empty, only then will it add the mark
     if (board[row][col].getValue() === "E") {
       board[row][col].addMarkToCell(playerMark);
+      return true;
     }
+
+    return false;
   };
 
   const printBoard = () => {
@@ -77,7 +80,17 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
   const playRound = (row, column) => {
     console.log(`${getActivePlayer().name} is placing their mark`);
-    Gameboard.placeMark(row, column, getActivePlayer().mark);
+
+    const isMarkPlaced = Gameboard.placeMark(
+      row,
+      column,
+      getActivePlayer().mark
+    );
+
+    if (!isMarkPlaced) {
+      console.log("Invalid move! Cell already occupied.");
+      return;
+    }
 
     const result = determineResult();
     if (result) {
