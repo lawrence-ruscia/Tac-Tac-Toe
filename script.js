@@ -49,6 +49,7 @@ function Cell() {
 function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
   const board = Gameboard.getBoard();
 
+  const getBoard = () => board;
   const players = [
     { name: playerOne, mark: "X" },
     { name: playerTwo, mark: "O" },
@@ -149,21 +150,67 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       console.log(`${getActivePlayer().name} wins!`);
     }
 
+    // TODO: FIX Draw keeps printing when playing using the UI
     if (checkTie()) {
-      console.log("Draw!");
+      // console.log("Draw!");
     }
   };
 
-  return { getActivePlayer, playRound };
+  return { getActivePlayer, playRound, getBoard };
 }
 
+function ScreenController() {
+  const controller = GameController();
+  const playerTurnDiv = document.querySelector(".turn");
+  const winnerDiv = document.querySelector(".winner");
+  const boardDiv = document.querySelector(".board");
+
+  const board = controller.getBoard();
+  const activePlayer = controller.getActivePlayer();
+
+  const updateScreen = () => {
+    // clear board
+    boardDiv.innerHTML = "";
+    playerTurnDiv.textContent = activePlayer.name;
+    board.forEach((row, rowIndex) => {
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "row";
+
+      row.forEach((cell, cellIndex) => {
+        const cellBtn = document.createElement("button");
+        cellBtn.className = "cell";
+
+        cellBtn.textContent = cell.getValue();
+        cellBtn.dataset.row = rowIndex;
+        cellBtn.dataset.col = cellIndex;
+
+        rowDiv.appendChild(cellBtn);
+      });
+      boardDiv.appendChild(rowDiv);
+    });
+  };
+
+  boardDiv.addEventListener("click", (e) => {
+    const cell = e.target;
+    const selectedCellCol = Number(cell.dataset.col);
+    const selectedCellRow = Number(cell.dataset.row);
+
+    if (cell.classList.contains("cell")) {
+      controller.playRound(selectedCellRow, selectedCellCol);
+      updateScreen();
+    }
+  });
+
+  updateScreen();
+}
 const controller = GameController("Human", "Robot");
-controller.playRound(0, 2);
-controller.playRound(0, 0);
-controller.playRound(1, 1);
-controller.playRound(0, 1);
-controller.playRound(1, 0);
-controller.playRound(1, 2);
-controller.playRound(2, 1);
-controller.playRound(2, 0);
-controller.playRound(2, 2);
+// controller.playRound(0, 2);
+// controller.playRound(0, 0);
+// controller.playRound(1, 1);
+// controller.playRound(0, 1);
+// controller.playRound(1, 0);
+// controller.playRound(1, 2);
+// controller.playRound(2, 1);
+// controller.playRound(2, 0);
+// controller.playRound(2, 2);
+ScreenController();
