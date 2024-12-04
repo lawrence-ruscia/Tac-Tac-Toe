@@ -5,7 +5,11 @@
 }
 
 .container {
-  outline: 1px solid red;
+  display: grid;
+  place-items: center;
+}
+
+.title {
   display: grid;
   place-items: center;
 }

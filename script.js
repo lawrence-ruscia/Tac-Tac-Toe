@@ -67,11 +67,18 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     console.log(`${getActivePlayer().name}'s turn`);
   };
 
+  let winner = null;
+  const setWinner = (winnerName) => (winner = winnerName);
+  const getWinner = () => winner;
+
   const playRound = (row, column) => {
     console.log(`${getActivePlayer().name} is placing their mark`);
     Gameboard.placeMark(row, column, getActivePlayer().mark);
 
-    determineWinner();
+    let winnerName = determineWinner();
+    if (winnerName) {
+      setWinner(winnerName);
+    }
 
     switchPlayerTurn();
     printNewRound();
@@ -149,19 +156,20 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
     if (checkHorizontally() || checkVertically() || checkDiagonally()) {
       console.log(`${getActivePlayer().name} wins!`);
+      return getActivePlayer().name;
     }
 
-    // TODO: FIXDraw keeps printing when playing using the UI
+    // TODO: FIX Draw keeps printing when playing using the UI
     if (checkTie()) {
       // console.log("Draw!");
     }
   };
 
-  return { getActivePlayer, playRound, getBoard };
+  return { getActivePlayer, playRound, getBoard, getWinner };
 }
 
-function ScreenController(gameController) {
-  const controller = gameController;
+function ScreenController() {
+  const controller = GameController("Human", "Robot");
   const playerTurnDiv = document.querySelector(".turn");
   const winnerDiv = document.querySelector(".winner");
   const boardDiv = document.querySelector(".board");
@@ -173,8 +181,14 @@ function ScreenController(gameController) {
     // get the newest version of the board and player turn
     const board = controller.getBoard();
     const activePlayer = controller.getActivePlayer();
+    const winner = controller.getWinner();
 
-    playerTurnDiv.textContent = activePlayer.name;
+    if (winner) {
+      winnerDiv.textContent = `${winner} wins!`;
+    } else {
+      playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+    }
+
     board.forEach((row, rowIndex) => {
       const rowDiv = document.createElement("div");
       rowDiv.className = "row";
@@ -215,5 +229,4 @@ function ScreenController(gameController) {
 // controller.playRound(2, 1);
 // controller.playRound(2, 0);
 // controller.playRound(2, 2);
-const controller = new GameController("Human", "Robot");
-ScreenController(controller);
+ScreenController();
