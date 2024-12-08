@@ -205,11 +205,14 @@ function ScreenController() {
     const activePlayer = controller.getActivePlayer();
     const roundResult = controller.getResult();
 
-    if (roundResult) {
-      roundResultDiv.textContent = roundResult;
-    } else {
-      activePlayerDiv.textContent = `${activePlayer.name}'s turn...`;
-    }
+    /*
+      Temporarily remove to avoid exceptions, remove when UI elements are complete
+    */
+    // if (roundResult) {
+    //   roundResultDiv.textContent = roundResult;
+    // } else {
+    //   activePlayerDiv.textContent = `${activePlayer.name}'s turn...`;
+    // }
 
     board.forEach((row, rowIndex) => {
       const rowDiv = document.createElement("div");
