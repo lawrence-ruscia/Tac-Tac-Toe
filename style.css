@@ -4,12 +4,12 @@
   box-sizing: border-box;
 }
 
-.container {
+.game {
   display: grid;
   place-items: center;
 }
 
-.title {
+.game__title {
   display: grid;
   place-items: center;
 }
@@ -22,7 +22,7 @@
   align-content: center;
 }
 
-.cell {
+.board__cell {
   border: 1px solid black;
   background: white;
   width: 200px;
@@ -31,6 +31,6 @@
   font-size: 2rem;
 }
 
-.cell:hover {
+.board__cell:hover {
   cursor: pointer;
 }

@@ -192,8 +192,8 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
 function ScreenController() {
   const controller = GameController("Human", "Robot");
-  const playerTurnDiv = document.querySelector(".turn");
-  const roundResultDiv = document.querySelector(".result");
+  const activePlayerDiv = document.querySelector(".game__active-player");
+  const roundResultDiv = document.querySelector(".game__result");
   const boardDiv = document.querySelector(".board");
 
   const updateScreen = () => {
@@ -208,16 +208,16 @@ function ScreenController() {
     if (roundResult) {
       roundResultDiv.textContent = roundResult;
     } else {
-      playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
+      activePlayerDiv.textContent = `${activePlayer.name}'s turn...`;
     }
 
     board.forEach((row, rowIndex) => {
       const rowDiv = document.createElement("div");
-      rowDiv.className = "row";
+      rowDiv.className = "board__row";
 
       row.forEach((cell, cellIndex) => {
         const cellBtn = document.createElement("button");
-        cellBtn.className = "cell";
+        cellBtn.className = "board__cell";
 
         cellBtn.textContent = cell.getValue();
         cellBtn.dataset.row = rowIndex;
@@ -234,7 +234,7 @@ function ScreenController() {
     const selectedCellCol = Number(cell.dataset.col);
     const selectedCellRow = Number(cell.dataset.row);
 
-    if (cell.classList.contains("cell")) {
+    if (cell.classList.contains("board__cell")) {
       controller.playRound(selectedCellRow, selectedCellCol);
       updateScreen();
     }
