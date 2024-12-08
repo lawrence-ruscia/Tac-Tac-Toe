@@ -34,6 +34,13 @@ button {
   justify-content: center;
 }
 
+.player__icon {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  object-position: 25% 10%;
+}
+
 .game__footer {
   outline: 1px solid red;
 
