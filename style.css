@@ -3,6 +3,11 @@
 *::after {
   box-sizing: border-box;
 }
+
+button {
+  cursor: pointer;
+}
+
 /* Game elements*/
 .game {
   margin: auto;
