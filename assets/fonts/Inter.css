@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'Inter';
+    src: url('fonts/Inter-VariableFontopszwght.eot');
+    src: url('fonts/Inter-VariableFontopszwght.eot?#iefix') format('embedded-opentype'),
+         url('fonts/Inter-VariableFontopszwght.woff2') format('woff2'),
+         url('fonts/Inter-VariableFontopszwght.woff') format('woff'),
+         url('fonts/Inter-VariableFontopszwght.ttf')  format('truetype'),
+         url('fonts/Inter-VariableFontopszwght.svg#Inter') format('svg');
+}
