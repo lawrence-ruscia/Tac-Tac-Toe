@@ -19,6 +19,14 @@
   --spacing-lg: 2rem; /* 32px */
   --spacing-xl: 3rem; /* 48px */
 
+  /* Border-Radius */
+  --radius-x-small: 4px;
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 16px;
+  --radius-x-large: 24px;
+  --radius-round: 50%;
+
   /* Font Sizes (rem-based) */
   --font-size-xs: 0.75rem; /* 12px */
   --font-size-sm: 0.875rem; /* 14px */
@@ -26,6 +34,10 @@
   --font-size-lg: 1.25rem; /* 20px */
   --font-size-xl: 1.5rem; /* 24px */
   --font-size-xxl: 2rem; /* 32px */
+}
+
+body {
+  font-size: var(--font-size-lg);
 }
 
 button {
@@ -50,19 +62,23 @@ button {
   justify-content: center;
   height: 100%;
   width: 100%;
+  gap: var(--spacing-sm);
 }
 
 .game__player {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--spacing-xxs);
 }
 
 .player__icon {
-  width: 48px;
-  height: 48px;
+  width: 64px;
+  height: 64px;
   object-fit: cover;
   object-position: 25% 10%;
+
+  border-radius: var(--radius-round);
 }
 
 .game__footer {
