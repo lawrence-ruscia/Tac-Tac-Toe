@@ -80,6 +80,9 @@ body {
   background: var(--color-background);
 
   color: var(--color-text);
+
+  display: grid;
+  place-items: center;
 }
 
 button {
@@ -91,10 +94,9 @@ button {
 .game {
   background-color: var(--color-primary);
 
-  margin: auto;
   display: grid;
   place-items: center;
-  max-width: 65%;
+  width: 65%;
   min-height: 100vh;
   grid-template-rows: auto auto auto;
   grid-template-columns: 1fr;

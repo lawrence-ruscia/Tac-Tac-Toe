@@ -225,7 +225,8 @@ function ScreenController() {
             ? " board__cell cell--x"
             : "board__cell cell--o";
 
-        cellBtn.textContent = cell.getValue();
+        const nbsp = "\u00A0"; // non-breaking space
+        cellBtn.textContent = cell.getValue() === "E" ? nbsp : cell.getValue();
 
         cellBtn.dataset.row = rowIndex;
         cellBtn.dataset.col = cellIndex;
