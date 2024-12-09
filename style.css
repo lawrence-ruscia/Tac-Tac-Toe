@@ -32,6 +32,11 @@
   --spacing-lg: 2rem; /* 32px */
   --spacing-xl: 3rem; /* 48px */
 
+  /* Button padding */
+  --padding-btn-sm: 0.4rem 0.8rem;
+  --padding-btn-md: 0.6rem 1.2rem;
+  --padding-btn-lg: 0.8rem 1.5rem;
+
   /* Border-Radius */
   --radius-x-small: 4px;
   --radius-small: 8px;
@@ -68,6 +73,7 @@ body {
 
 button {
   cursor: pointer;
+  font-size: var(--font-size-md);
 }
 
 /* Game elements*/
@@ -116,13 +122,17 @@ button {
 
   display: flex;
   align-items: center;
+
   width: 100%;
   height: 100%;
+
+  padding: var(--spacing-sm);
 }
 
 .game__leave-btn {
-  width: 85px;
-  height: 40px;
+  padding: var(--padding-btn-sm);
+
+  border-radius: var(--radius-small);
 }
 
 /* Board  elements*/
