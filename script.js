@@ -220,9 +220,13 @@ function ScreenController() {
 
       row.forEach((cell, cellIndex) => {
         const cellBtn = document.createElement("button");
-        cellBtn.className = "board__cell";
+        cellBtn.className =
+          cell.getValue() === "X"
+            ? " board__cell cell--x"
+            : "board__cell cell--o";
 
         cellBtn.textContent = cell.getValue();
+
         cellBtn.dataset.row = rowIndex;
         cellBtn.dataset.col = cellIndex;
 

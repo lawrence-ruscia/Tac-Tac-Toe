@@ -193,3 +193,11 @@ button {
 .board__cell:not(:last-child) {
   border-right: var(--board-separator);
 }
+
+.cell--x {
+  color: var(--color-mark-x);
+}
+
+.cell--o {
+  color: var(--color-mark-o);
+}
