@@ -212,12 +212,17 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 }
 
 function ScreenController() {
-  const controller = GameController("Human", "Robot");
+  const controller = GameController("Lawrence", "Robot");
   const activePlayerDiv = document.querySelector(".game__active-player");
   const roundResultDiv = document.querySelector(".game__result");
   const boardDiv = document.querySelector(".board");
-  const player1score = document.querySelector("#player1Score");
-  const player2score = document.querySelector("#player2Score");
+  const player1scorePara = document.querySelector("#player1Score");
+  const player2scorePara = document.querySelector("#player2Score");
+  const player1NamePara = document.querySelector(".player__name--1");
+  const player2NamePara = document.querySelector(".player__name--2");
+
+  player1NamePara.textContent = controller.getPlayerOne().name;
+  player2NamePara.textContent = controller.getPlayerTwo().name;
 
   const updateScreen = () => {
     // clear board
@@ -230,8 +235,8 @@ function ScreenController() {
     const player1 = controller.getPlayerOne();
     const player2 = controller.getPlayerTwo();
 
-    player1score.textContent = player1.score;
-    player2score.textContent = player2.score;
+    player1scorePara.textContent = player1.score;
+    player2scorePara.textContent = player2.score;
 
     /*
       Temporarily remove to avoid exceptions, remove when UI elements are complete
