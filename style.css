@@ -122,7 +122,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-xxs);
+  gap: var(--spacing-xs);
 }
 
 .player__icon {
