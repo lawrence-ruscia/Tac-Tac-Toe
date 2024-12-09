@@ -118,6 +118,7 @@ button {
   padding: var(--spacing-xs);
 }
 
+/* TODO: Fix layout shifting when score is updated */
 .game__player {
   display: flex;
   align-items: center;

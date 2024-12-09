@@ -54,13 +54,17 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
   const getBoard = () => board;
   const players = [
-    { name: playerOne, mark: "X" },
-    { name: playerTwo, mark: "O" },
+    { name: playerOne, mark: "X", score: 0 },
+    { name: playerTwo, mark: "O", score: 0 },
   ];
 
   let activePlayer = players[0];
 
   const getActivePlayer = () => activePlayer;
+  const getPlayerOne = () => players[0];
+  const getPlayerTwo = () => players[1];
+
+  const incrementActivePlayerScore = () => (getActivePlayer().score += 1);
 
   const switchPlayerTurn = () =>
     (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
@@ -173,6 +177,8 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
     if (checkHorizontally() || checkVertically() || checkDiagonally()) {
       console.log(`${getActivePlayer().name} wins!`);
+      incrementActivePlayerScore();
+
       return `${getActivePlayer().name} wins!`;
     }
 
@@ -184,6 +190,8 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
   return {
     getActivePlayer,
+    getPlayerOne,
+    getPlayerTwo,
     playRound,
     getBoard,
     getResult: gameState.getResult,
@@ -195,6 +203,8 @@ function ScreenController() {
   const activePlayerDiv = document.querySelector(".game__active-player");
   const roundResultDiv = document.querySelector(".game__result");
   const boardDiv = document.querySelector(".board");
+  const player1score = document.querySelector("#player1Score");
+  const player2score = document.querySelector("#player2Score");
 
   const updateScreen = () => {
     // clear board
@@ -204,7 +214,11 @@ function ScreenController() {
     const board = controller.getBoard();
     const activePlayer = controller.getActivePlayer();
     const roundResult = controller.getResult();
+    const player1 = controller.getPlayerOne();
+    const player2 = controller.getPlayerTwo();
 
+    player1score.textContent = player1.score;
+    player2score.textContent = player2.score;
     /*
       Temporarily remove to avoid exceptions, remove when UI elements are complete
     */
