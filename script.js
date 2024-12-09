@@ -219,6 +219,7 @@ function ScreenController() {
 
     player1score.textContent = player1.score;
     player2score.textContent = player2.score;
+
     /*
       Temporarily remove to avoid exceptions, remove when UI elements are complete
     */
@@ -255,6 +256,12 @@ function ScreenController() {
     const cell = e.target;
     const selectedCellCol = Number(cell.dataset.col);
     const selectedCellRow = Number(cell.dataset.row);
+    const roundResult = controller.getResult();
+
+    // if round winner has already been determined, then disable placing of marks
+    if (roundResult) {
+      return;
+    }
 
     if (cell.classList.contains("board__cell")) {
       controller.playRound(selectedCellRow, selectedCellCol);
