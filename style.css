@@ -19,10 +19,14 @@
 
 :root {
   /* Colors */
-  --color-primary: #007bff;
-  --color-secondary: #6c757d;
-  --color-background: #f8f9fa;
-  --color-text: #212529;
+  --color-primary: #101b27;
+  --color-secondary: #2c3e50;
+  --color-background: #1b2837;
+  --color-text: #c0c5cb;
+  --color-border: #6b7885;
+  /* (Mark Colors) */
+  --color-mark-x: #18bc9c;
+  --color-mark-o: #ee6677;
 
   /* Spacing (rem-based) */
   --spacing-xxs: 0.25rem; /* 4px */
@@ -46,7 +50,7 @@
   --radius-round: 50%;
 
   /* Board Separator */
-  --board-separator: 18px solid black;
+  --board-separator: 18px solid var(--color-border);
 
   /* Font Sizes (rem-based) */
   --font-size-xs: 0.75rem; /* 12px */
