@@ -188,6 +188,7 @@ button {
   height: 100%;
   text-align: center;
   font-size: 12rem;
+  font-weight: var(--font-weight-medium);
 }
 
 .board__cell:not(:last-child) {
