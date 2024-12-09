@@ -53,25 +53,38 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
   const board = Gameboard.getBoard();
 
   const getBoard = () => board;
-  const players = [
-    { name: playerOne, mark: "X", score: 0 },
-    { name: playerTwo, mark: "O", score: 0 },
-  ];
 
-  let activePlayer = players[0];
+  const playerState = ((playerOne, playerTwo) => {
+    const players = [
+      { name: playerOne, mark: "X", score: 0 },
+      { name: playerTwo, mark: "O", score: 0 },
+    ];
 
-  const getActivePlayer = () => activePlayer;
-  const getPlayerOne = () => players[0];
-  const getPlayerTwo = () => players[1];
+    let activePlayer = players[0];
 
-  const incrementActivePlayerScore = () => (getActivePlayer().score += 1);
+    // This way, the returned objects are copies, and external modifications won’t affect the original state.
+    const getActivePlayer = () => ({ ...activePlayer });
+    const getPlayerOne = () => ({ ...players[0] });
+    const getPlayerTwo = () => ({ ...players[1] });
 
-  const switchPlayerTurn = () =>
-    (activePlayer = activePlayer === players[0] ? players[1] : players[0]);
+    const switchPlayerTurn = () => {
+      activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    };
+
+    const incrementActivePlayerScore = () => (activePlayer.score += 1);
+
+    return {
+      getActivePlayer,
+      getPlayerOne,
+      getPlayerTwo,
+      switchPlayerTurn,
+      incrementActivePlayerScore,
+    };
+  })(playerOne, playerTwo);
 
   const printNewRound = () => {
     Gameboard.printBoard();
-    console.log(`${getActivePlayer().name}'s turn`);
+    console.log(`${playerState.getActivePlayer().name}'s turn`);
   };
 
   const gameState = (() => {
@@ -83,12 +96,12 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
   })();
 
   const playRound = (row, column) => {
-    console.log(`${getActivePlayer().name} is placing their mark`);
+    console.log(`${playerState.getActivePlayer().name} is placing their mark`);
 
     const isMarkPlaced = Gameboard.placeMark(
       row,
       column,
-      getActivePlayer().mark
+      playerState.getActivePlayer().mark
     );
 
     if (!isMarkPlaced) {
@@ -101,14 +114,14 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       gameState.setResult(result);
     }
 
-    switchPlayerTurn();
+    playerState.switchPlayerTurn();
     printNewRound();
   };
 
   printNewRound(); // Initial game message
 
   const determineResult = () => {
-    const playerMark = getActivePlayer().mark;
+    const playerMark = playerState.getActivePlayer().mark;
     // Check 3 consecutive marks horizontally, vertically, and diagonally
 
     // iterate each row then, check through each col for 3 consecutive marks
@@ -176,10 +189,10 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     };
 
     if (checkHorizontally() || checkVertically() || checkDiagonally()) {
-      console.log(`${getActivePlayer().name} wins!`);
-      incrementActivePlayerScore();
+      console.log(`${playerState.getActivePlayer().name} wins!`);
+      playerState.incrementActivePlayerScore();
 
-      return `${getActivePlayer().name} wins!`;
+      return `${playerState.getActivePlayer().name} wins!`;
     }
 
     if (checkTie()) {
@@ -189,9 +202,9 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
   };
 
   return {
-    getActivePlayer,
-    getPlayerOne,
-    getPlayerTwo,
+    getActivePlayer: playerState.getActivePlayer,
+    getPlayerOne: playerState.getPlayerOne,
+    getPlayerTwo: playerState.getPlayerTwo,
     playRound,
     getBoard,
     getResult: gameState.getResult,
