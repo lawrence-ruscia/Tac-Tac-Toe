@@ -287,6 +287,35 @@ function ScreenController() {
     }
   });
 
+  const GamePopup = (() => {
+    const showGamePopup = (message) => {
+      const popup = document.getElementById("gamePopup");
+      popup.textContent = message; // Set the popup text
+      popup.classList.add("show");
+
+      // Hide the popup after 2 seconds
+      setTimeout(() => {
+        popup.classList.remove("show");
+      }, 2000);
+    };
+
+    const startGame = () => {
+      // Initialize game state, board, players, etc.
+      showGamePopup("Game Started!");
+
+      // Additional game start logic
+      console.log("Game initialized!");
+    };
+
+    return { showGamePopup, startGame };
+  })();
+
+  // Initial popup
+  document.addEventListener("DOMContentLoaded", () => {
+    GamePopup.startGame();
+  });
+
   updateScreen();
 }
+
 ScreenController();

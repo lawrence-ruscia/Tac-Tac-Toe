@@ -11,6 +11,15 @@
       format("svg");
 }
 
+@font-face {
+  font-family: "Jungle Adventurer";
+  src: url("./assets/fonts/JungleAdventurerRegular.woff2") format("woff2"),
+    url("./assets/fonts/JungleAdventurerRegular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 *,
 *::before,
 *::after {
@@ -92,6 +101,7 @@ button {
 
 /* Game elements*/
 .game {
+  position: relative;
   background-color: var(--color-primary);
 
   display: grid;
@@ -103,6 +113,30 @@ button {
   grid-template-columns: 1fr;
 
   border: var(--border-default);
+}
+
+/* Game Popup */
+.game__popup {
+  width: 100%;
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #d63384;
+  font-family: "Jungle Adventurer";
+  font-size: 5rem;
+  font-weight: bold;
+  letter-spacing: 3px;
+  -webkit-text-stroke: 1px black;
+  text-align: center;
+  opacity: 0; /* Hidden by default */
+  visibility: hidden; /* Prevent interaction when hidden */
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.game__popup.show {
+  opacity: 1;
+  visibility: visible;
 }
 
 .game__header {
