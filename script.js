@@ -1,15 +1,19 @@
 const Gameboard = (() => {
   const rows = 3;
   const columns = 3;
-  const board = []; // this will store the rows/columns
+  let board = []; // this will store the rows/columns
 
   // Each row will be an array and contain a cell obj
-  for (let i = 0; i < rows; i++) {
-    board[i] = [];
-    for (let j = 0; j < columns; j++) {
-      board[i].push(Cell());
+  const generateBoard = () => {
+    for (let i = 0; i < rows; i++) {
+      board[i] = [];
+      for (let j = 0; j < columns; j++) {
+        board[i].push(Cell());
+      }
     }
-  }
+  };
+
+  generateBoard();
 
   const getBoard = () => board;
 
@@ -30,7 +34,7 @@ const Gameboard = (() => {
     console.log(boardWithCellValues);
   };
 
-  return { getBoard, placeMark, printBoard };
+  return { getBoard, placeMark, printBoard, generateBoard };
 })();
 
 /*
@@ -71,6 +75,8 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       activePlayer = activePlayer === players[0] ? players[1] : players[0];
     };
 
+    const resetPlayerTurn = () => (activePlayer = players[0]);
+
     const incrementActivePlayerScore = () => (activePlayer.score += 1);
 
     return {
@@ -78,21 +84,42 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       getPlayerOne,
       getPlayerTwo,
       switchPlayerTurn,
+      resetPlayerTurn,
       incrementActivePlayerScore,
     };
   })(playerOne, playerTwo);
+
+  const gameState = (() => {
+    let roundCount = 1;
+    let result = null;
+
+    const incrementRoundCount = () => roundCount++;
+    const getRoundCount = () => roundCount;
+    const setResult = (roundResult) => (result = roundResult);
+    const getResult = () => result;
+    const resetResult = () => setResult(null);
+
+    return {
+      incrementRoundCount,
+      getRoundCount,
+      setResult,
+      resetResult,
+      getResult,
+    };
+  })();
 
   const printNewRound = () => {
     Gameboard.printBoard();
     console.log(`${playerState.getActivePlayer().name}'s turn`);
   };
 
-  const gameState = (() => {
-    let result = null;
-    const setResult = (roundResult) => (result = roundResult);
-    const getResult = () => result;
+  const overallWinner = (() => {
+    let overallWinner = null;
 
-    return { setResult, getResult };
+    const setWinner = (player) => (overallWinner = player);
+    const getWinner = () => overallWinner;
+
+    return { setWinner, getWinner };
   })();
 
   const playRound = (row, column) => {
@@ -110,14 +137,29 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     }
 
     const result = determineResult();
+
+    const playerOne = playerState.getPlayerOne();
+    const playerTwo = playerState.getPlayerTwo();
+
+    if (playerOne.score > playerTwo.score) {
+      overallWinner.setWinner(playerOne);
+    }
+
+    if (playerOne.score < playerTwo.score) {
+      overallWinner.setWinner(playerTwo);
+    }
+
     if (result) {
       gameState.setResult(result);
+      Gameboard.generateBoard(); // reset board each round
+      gameState.incrementRoundCount();
     }
 
     playerState.switchPlayerTurn();
     printNewRound();
   };
 
+  console.log(`Round ${gameState.getRoundCount()}`);
   printNewRound(); // Initial game message
 
   const determineResult = () => {
@@ -201,13 +243,21 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     }
   };
 
+  const resetRound = () => {
+    playerState.resetPlayerTurn();
+    gameState.resetResult();
+  };
+
   return {
     getActivePlayer: playerState.getActivePlayer,
     getPlayerOne: playerState.getPlayerOne,
     getPlayerTwo: playerState.getPlayerTwo,
     playRound,
     getBoard,
+    resetRound,
     getResult: gameState.getResult,
+    getRoundCount: gameState.getRoundCount,
+    getWinner: overallWinner.getWinner,
   };
 }
 
@@ -232,6 +282,7 @@ function ScreenController() {
     const board = controller.getBoard();
     const activePlayer = controller.getActivePlayer();
     const roundResult = controller.getResult();
+
     const player1 = controller.getPlayerOne();
     const player2 = controller.getPlayerTwo();
 
@@ -268,6 +319,20 @@ function ScreenController() {
       });
       boardDiv.appendChild(rowDiv);
     });
+
+    const roundCount = controller.getRoundCount();
+
+    if (roundCount > 3) {
+      const overallWinner = controller.getWinner();
+      GamePopup.showGamePopup(`${overallWinner.name} wins!`);
+      return;
+    }
+
+    if (roundResult) {
+      console.log(`Round ${roundCount}`);
+      GamePopup.showGamePopup(`Round ${roundCount}`);
+      controller.resetRound();
+    }
   };
 
   boardDiv.addEventListener("click", (e) => {
@@ -275,13 +340,11 @@ function ScreenController() {
     const selectedCellCol = Number(cell.dataset.col);
     const selectedCellRow = Number(cell.dataset.row);
     const roundResult = controller.getResult();
+    const roundCount = controller.getRoundCount();
 
-    // if round winner has already been determined, then disable placing of marks
-    if (roundResult) {
-      return;
-    }
+    // if winner has already been determined, then disable placing of marks
 
-    if (cell.classList.contains("board__cell")) {
+    if (cell.classList.contains("board__cell") && roundCount <= 3) {
       controller.playRound(selectedCellRow, selectedCellCol);
       updateScreen();
     }
