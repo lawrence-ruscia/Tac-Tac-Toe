@@ -263,8 +263,6 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
 function ScreenController() {
   const controller = GameController("Lawrence", "Robot");
-  const activePlayerDiv = document.querySelector(".game__active-player");
-  const roundResultDiv = document.querySelector(".game__result");
   const boardDiv = document.querySelector(".board");
   const player1scorePara = document.querySelector("#player1Score");
   const player2scorePara = document.querySelector("#player2Score");
@@ -280,7 +278,6 @@ function ScreenController() {
 
     // get the newest version of the board and player turn
     const board = controller.getBoard();
-    const activePlayer = controller.getActivePlayer();
     const roundResult = controller.getResult();
 
     const player1 = controller.getPlayerOne();
@@ -288,15 +285,6 @@ function ScreenController() {
 
     player1scorePara.textContent = player1.score;
     player2scorePara.textContent = player2.score;
-
-    /*
-      Temporarily remove to avoid exceptions, remove when UI elements are complete
-    */
-    // if (roundResult) {
-    //   roundResultDiv.textContent = roundResult;
-    // } else {
-    //   activePlayerDiv.textContent = `${activePlayer.name}'s turn...`;
-    // }
 
     board.forEach((row, rowIndex) => {
       const rowDiv = document.createElement("div");
