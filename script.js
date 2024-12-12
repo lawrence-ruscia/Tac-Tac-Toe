@@ -89,35 +89,16 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     };
   })(playerOne, playerTwo);
 
-  const gameState = (() => {
-    let roundCount = 1;
-    let result = null;
-
-    const incrementRoundCount = () => roundCount++;
-    const getRoundCount = () => roundCount;
-    const setResult = (roundResult) => (result = roundResult);
-    const getResult = () => result;
-    const resetResult = () => setResult(null);
-
-    return {
-      incrementRoundCount,
-      getRoundCount,
-      setResult,
-      resetResult,
-      getResult,
-    };
-  })();
-
   const printNewRound = () => {
     Gameboard.printBoard();
     console.log(`${playerState.getActivePlayer().name}'s turn`);
   };
 
-  const overallWinner = (() => {
-    let overallWinner = null;
+  const roundWinner = (() => {
+    let winner = null;
 
-    const setWinner = (player) => (overallWinner = player);
-    const getWinner = () => overallWinner;
+    const setWinner = (player) => (winner = player);
+    const getWinner = () => winner;
 
     return { setWinner, getWinner };
   })();
@@ -138,28 +119,20 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
     const result = determineResult();
 
-    const playerOne = playerState.getPlayerOne();
-    const playerTwo = playerState.getPlayerTwo();
-
-    if (playerOne.score > playerTwo.score) {
-      overallWinner.setWinner(playerOne);
-    }
-
-    if (playerOne.score < playerTwo.score) {
-      overallWinner.setWinner(playerTwo);
+    function resetRound() {
+      Gameboard.generateBoard();
+      playerState.resetPlayerTurn();
     }
 
     if (result) {
-      gameState.setResult(result);
-      Gameboard.generateBoard(); // reset board each round
-      gameState.incrementRoundCount();
+      Gameboard.printBoard();
+      resetRound(); // reset board each round
     }
 
     playerState.switchPlayerTurn();
     printNewRound();
   };
 
-  console.log(`Round ${gameState.getRoundCount()}`);
   printNewRound(); // Initial game message
 
   const determineResult = () => {
@@ -232,8 +205,8 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
     if (checkHorizontally() || checkVertically() || checkDiagonally()) {
       console.log(`${playerState.getActivePlayer().name} wins!`);
+      roundWinner.setWinner(playerState.getActivePlayer());
       playerState.incrementActivePlayerScore();
-
       return `${playerState.getActivePlayer().name} wins!`;
     }
 
@@ -243,21 +216,13 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     }
   };
 
-  const resetRound = () => {
-    playerState.resetPlayerTurn();
-    gameState.resetResult();
-  };
-
   return {
     getActivePlayer: playerState.getActivePlayer,
     getPlayerOne: playerState.getPlayerOne,
     getPlayerTwo: playerState.getPlayerTwo,
     playRound,
     getBoard,
-    resetRound,
-    getResult: gameState.getResult,
-    getRoundCount: gameState.getRoundCount,
-    getWinner: overallWinner.getWinner,
+    getWinner: roundWinner.getWinner,
   };
 }
 
@@ -278,10 +243,10 @@ function ScreenController() {
 
     // get the newest version of the board and player turn
     const board = controller.getBoard();
-    const roundResult = controller.getResult();
 
     const player1 = controller.getPlayerOne();
     const player2 = controller.getPlayerTwo();
+    const roundWinner = controller.getWinner();
 
     player1scorePara.textContent = player1.score;
     player2scorePara.textContent = player2.score;
@@ -308,18 +273,8 @@ function ScreenController() {
       boardDiv.appendChild(rowDiv);
     });
 
-    const roundCount = controller.getRoundCount();
-
-    if (roundCount > 3) {
-      const overallWinner = controller.getWinner();
-      GamePopup.showGamePopup(`${overallWinner.name} wins!`);
-      return;
-    }
-
-    if (roundResult) {
-      console.log(`Round ${roundCount}`);
-      GamePopup.showGamePopup(`Round ${roundCount}`);
-      controller.resetRound();
+    if (roundWinner !== null) {
+      GamePopup.showGamePopup(`${roundWinner.name} wins!`);
     }
   };
 
@@ -327,12 +282,10 @@ function ScreenController() {
     const cell = e.target;
     const selectedCellCol = Number(cell.dataset.col);
     const selectedCellRow = Number(cell.dataset.row);
-    const roundResult = controller.getResult();
-    const roundCount = controller.getRoundCount();
+    const roundWinner = controller.getWinner();
 
-    // if winner has already been determined, then disable placing of marks
-
-    if (cell.classList.contains("board__cell") && roundCount <= 3) {
+    // Enable cell btn click events only if there is currently no determined winner
+    if (cell.classList.contains("board__cell") && !roundWinner) {
       controller.playRound(selectedCellRow, selectedCellCol);
       updateScreen();
     }
