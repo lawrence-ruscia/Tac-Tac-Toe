@@ -278,7 +278,8 @@ function ScreenController() {
     //
     if (roundWinner !== null) {
       GamePopup.showGamePopup(`${roundWinner.name} wins!`);
-      displayPlayAgainScreen();
+
+      setTimeout(displayPlayAgainScreen, 2000);
     }
 
     function displayPlayAgainScreen() {
