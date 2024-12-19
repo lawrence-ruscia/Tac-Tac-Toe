@@ -285,17 +285,21 @@ function ScreenController() {
       const board = document.querySelector(".board");
       clearAllChildElements(".board");
 
-      board.style["display"] = "flex";
-      board.style["flex-direction"] = "column";
-      board.style["justify-content"] = "center";
-      board.style["align-items"] = "center";
+      const boardStyle = {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "var(--spacing-sm)",
+      };
 
-      board.style["gap"] = "var(--spacing-sm)";
+      setElementStyles(board, boardStyle);
 
       const playAgain = createButtonElement(
         ["board__play-again"],
         "Play again!"
       );
+
       const abortGame = createButtonElement(
         ["board__abort-game", "ghost-btn"],
         "Abort game"
@@ -303,6 +307,10 @@ function ScreenController() {
 
       board.appendChild(playAgain);
       board.appendChild(abortGame);
+    }
+
+    function setElementStyles(element, styleObj) {
+      Object.assign(element.style, styleObj);
     }
 
     function clearAllChildElements(selector) {
