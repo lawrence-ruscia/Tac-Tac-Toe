@@ -273,8 +273,51 @@ function ScreenController() {
       boardDiv.appendChild(rowDiv);
     });
 
+    // TODO: Create feat that will clear the board elements
+    // and display two buttons (play again, abort game) after a round finishes
+    //
     if (roundWinner !== null) {
       GamePopup.showGamePopup(`${roundWinner.name} wins!`);
+      displayPlayAgainScreen();
+    }
+
+    function displayPlayAgainScreen() {
+      const board = document.querySelector(".board");
+      clearAllChildElements(".board");
+
+      board.style["display"] = "flex";
+      board.style["flex-direction"] = "column";
+      board.style["justify-content"] = "center";
+      board.style["align-items"] = "center";
+
+      board.style["gap"] = "var(--spacing-sm)";
+
+      const playAgain = createButtonElement(
+        ["board__play-again"],
+        "Play again!"
+      );
+      const abortGame = createButtonElement(
+        ["board__abort-game", "ghost-btn"],
+        "Abort game"
+      );
+
+      board.appendChild(playAgain);
+      board.appendChild(abortGame);
+    }
+
+    function clearAllChildElements(selector) {
+      const element = document.querySelector(selector);
+      element.innerHTML = "";
+    }
+
+    function createButtonElement(classArr, textContent = "Button") {
+      const button = document.createElement("button");
+      for (const classItem of classArr) {
+        button.classList.add(classItem);
+      }
+      button.textContent = textContent;
+
+      return button;
     }
   };
 

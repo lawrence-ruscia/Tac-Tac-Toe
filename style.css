@@ -63,6 +63,7 @@
 
   /* Border */
   --border-default: 1px solid #6b78854b;
+  --border-btn-default: 1px solid #ffffff57;
 
   /* Font Sizes (rem-based) */
   --font-size-xs: 0.75rem; /* 12px */
@@ -95,6 +96,7 @@ body {
 }
 
 button {
+  border: 0;
   cursor: pointer;
   font-size: var(--font-size-md);
 }
@@ -188,7 +190,7 @@ button {
   padding: var(--spacing-xs);
 }
 
-.game__leave-btn {
+#game__abortGame {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-small);
   padding: var(--padding-btn-md);
@@ -247,4 +249,25 @@ button {
 
 .cell--o {
   color: var(--color-mark-o);
+}
+
+.board__play-again {
+  background-color: var(--color-mark-x);
+  color: var(--color-text);
+
+  font-weight: var(--font-weight-bold);
+
+  padding: var(--padding-btn-lg);
+
+  border-radius: var(--radius-small);
+}
+
+.ghost-btn {
+  background-color: var(--color-primary);
+  color: var(--color-text);
+
+  padding: var(--padding-btn-lg);
+
+  border: var(--border-btn-default);
+  border-radius: var(--radius-small);
 }
