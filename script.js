@@ -34,7 +34,12 @@ const Gameboard = (() => {
     console.log(boardWithCellValues);
   };
 
-  return { getBoard, placeMark, printBoard, generateBoard };
+  const resetBoard = () => {
+    generateBoard(); // Reinitialize the board
+    console.log("Board has been reset!");
+  };
+
+  return { getBoard, placeMark, printBoard, resetBoard };
 })();
 
 /*
@@ -99,9 +104,15 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
     const setWinner = (player) => (winner = player);
     const getWinner = () => winner;
+    const resetWinner = () => (winner = null);
 
-    return { setWinner, getWinner };
+    return { setWinner, getWinner, resetWinner };
   })();
+
+  function resetRound() {
+    Gameboard.resetBoard();
+    playerState.resetPlayerTurn();
+  }
 
   const playRound = (row, column) => {
     console.log(`${playerState.getActivePlayer().name} is placing their mark`);
@@ -112,6 +123,8 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       playerState.getActivePlayer().mark
     );
 
+    // FIXME: isMarkPlaced executes console.log even though the game has been reset
+    //        (therefore the cells should have the value of 'E')
     if (!isMarkPlaced) {
       console.log("Invalid move! Cell already occupied.");
       return;
@@ -119,18 +132,15 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
     const result = determineResult();
 
-    function resetRound() {
-      Gameboard.generateBoard();
-      playerState.resetPlayerTurn();
-    }
-
     if (result) {
+      console.log("Game reset!");
       Gameboard.printBoard();
       resetRound(); // reset board each round
+      Gameboard.printBoard();
+    } else {
+      playerState.switchPlayerTurn();
+      printNewRound();
     }
-
-    playerState.switchPlayerTurn();
-    printNewRound();
   };
 
   printNewRound(); // Initial game message
@@ -222,6 +232,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
     getPlayerTwo: playerState.getPlayerTwo,
     playRound,
     getBoard,
+    resetWinner: roundWinner.resetWinner,
     getWinner: roundWinner.getWinner,
   };
 }
@@ -287,6 +298,21 @@ function ScreenController() {
           displayChildElements(boardDiv);
           abortGame.remove();
           playAgain.remove();
+          controller.resetWinner();
+
+          GamePopup.startGame();
+          boardDiv.addEventListener("click", (e) => {
+            const cell = e.target;
+            const selectedCellCol = Number(cell.dataset.col);
+            const selectedCellRow = Number(cell.dataset.row);
+            const roundWinner = controller.getWinner();
+
+            // Enable cell btn click events only if there is currently no determined winner
+            if (cell.classList.contains("board__cell") && !roundWinner) {
+              controller.playRound(selectedCellRow, selectedCellCol);
+              updateScreen();
+            }
+          });
         });
       }, 2000);
     }
