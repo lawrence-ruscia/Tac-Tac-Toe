@@ -220,6 +220,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 
     if (checkTie()) {
       console.log("Draw!");
+      roundWinner.setWinner("Draw");
       return "Draw!";
     }
   };
@@ -281,7 +282,6 @@ function ScreenController() {
       boardDiv.appendChild(rowDiv);
     });
 
-    // TODO: Add feature that highlights current active player
     function toggleActivePlayerBorder() {
       const activePlayer = controller.getActivePlayer();
       const player1Div = document.querySelector(".game__player--1");
@@ -310,7 +310,10 @@ function ScreenController() {
     }
 
     if (roundWinner !== null) {
-      GamePopup.showGamePopup(`${roundWinner.name} wins!`);
+      const message =
+        roundWinner === "Draw" ? "Draw!" : `${roundWinner.name} wins!`;
+
+      GamePopup.showGamePopup(message);
 
       setTimeout(() => {
         displayPlayAgainScreen();
