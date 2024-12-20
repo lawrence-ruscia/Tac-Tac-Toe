@@ -122,11 +122,8 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       column,
       playerState.getActivePlayer().mark
     );
-
-    // FIXME: isMarkPlaced executes console.log even though the game has been reset
-    //        (therefore the cells should have the value of 'E')
     if (!isMarkPlaced) {
-      console.log("Invalid move! Cell already occupied.");
+      console.log("Invalid! cell is already occupied");
       return;
     }
 
@@ -301,18 +298,6 @@ function ScreenController() {
           controller.resetWinner();
 
           GamePopup.startGame();
-          boardDiv.addEventListener("click", (e) => {
-            const cell = e.target;
-            const selectedCellCol = Number(cell.dataset.col);
-            const selectedCellRow = Number(cell.dataset.row);
-            const roundWinner = controller.getWinner();
-
-            // Enable cell btn click events only if there is currently no determined winner
-            if (cell.classList.contains("board__cell") && !roundWinner) {
-              controller.playRound(selectedCellRow, selectedCellCol);
-              updateScreen();
-            }
-          });
         });
       }, 2000);
     }
