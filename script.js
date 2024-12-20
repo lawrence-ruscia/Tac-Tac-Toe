@@ -233,7 +233,6 @@ function ScreenController() {
   const player2scorePara = document.querySelector("#player2Score");
   const player1NamePara = document.querySelector(".player__name--1");
   const player2NamePara = document.querySelector(".player__name--2");
-
   player1NamePara.textContent = controller.getPlayerOne().name;
   player2NamePara.textContent = controller.getPlayerTwo().name;
 
@@ -273,18 +272,28 @@ function ScreenController() {
       boardDiv.appendChild(rowDiv);
     });
 
-    // TODO: Create feat that will clear the board elements
-    // and display two buttons (play again, abort game) after a round finishes
-    //
     if (roundWinner !== null) {
       GamePopup.showGamePopup(`${roundWinner.name} wins!`);
 
-      setTimeout(displayPlayAgainScreen, 2000);
+      setTimeout(() => {
+        displayPlayAgainScreen();
+
+        const playAgain = document.querySelector(".board__play-again");
+        const abortGame = document.querySelector(".board__abort-game");
+        playAgain.addEventListener("click", () => {
+          const board = document.querySelector(".board");
+          board.removeAttribute("style");
+
+          displayChildElements(boardDiv);
+          abortGame.remove();
+          playAgain.remove();
+        });
+      }, 2000);
     }
 
     function displayPlayAgainScreen() {
       const board = document.querySelector(".board");
-      clearAllChildElements(".board");
+      hideChildElements(board);
 
       const boardStyle = {
         display: "flex",
@@ -314,9 +323,13 @@ function ScreenController() {
       Object.assign(element.style, styleObj);
     }
 
-    function clearAllChildElements(selector) {
-      const element = document.querySelector(selector);
-      element.innerHTML = "";
+    function hideChildElements(element) {
+      const children = element.children;
+
+      for (const child of children) {
+        child.style.position = "absolute";
+        child.style.top = "-9999px";
+      }
     }
 
     function createButtonElement(classArr, textContent = "Button") {
@@ -329,6 +342,14 @@ function ScreenController() {
       return button;
     }
   };
+
+  function displayChildElements(element) {
+    const children = element.children;
+
+    for (const child of children) {
+      child.removeAttribute("style"); // Resets to its original position
+    }
+  }
 
   boardDiv.addEventListener("click", (e) => {
     const cell = e.target;
