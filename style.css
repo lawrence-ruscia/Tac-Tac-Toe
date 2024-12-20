@@ -32,7 +32,9 @@
   --color-secondary: #2c3e50;
   --color-background: #1b2837;
   --color-text: #c0c5cb;
+  --color-btn-primary-text: #ffff;
   --color-border: #6b7885;
+
   /* (Mark Colors) */
   --color-mark-x: #18bc9c;
   --color-mark-o: #ee6677;
@@ -265,7 +267,7 @@ button {
 
 .board__play-again {
   background-color: var(--color-mark-x);
-  color: var(--color-text);
+  color: var(--color-btn-primary-text);
 
   font-weight: var(--font-weight-bold);
 
