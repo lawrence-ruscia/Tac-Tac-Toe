@@ -162,6 +162,14 @@ button {
   gap: var(--spacing-xs);
 }
 
+.game__player--1.game__player--active > img {
+  outline: 5px solid var(--color-mark-x);
+}
+
+.game__player--2.game__player--active > img {
+  outline: 5px solid var(--color-mark-o);
+}
+
 .player__icon {
   width: 64px;
   height: 64px;

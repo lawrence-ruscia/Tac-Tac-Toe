@@ -122,6 +122,7 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
       column,
       playerState.getActivePlayer().mark
     );
+
     if (!isMarkPlaced) {
       console.log("Invalid! cell is already occupied");
       return;
@@ -280,6 +281,34 @@ function ScreenController() {
       boardDiv.appendChild(rowDiv);
     });
 
+    // TODO: Add feature that highlights current active player
+    function toggleActivePlayerBorder() {
+      const activePlayer = controller.getActivePlayer();
+      const player1Div = document.querySelector(".game__player--1");
+      const player2Div = document.querySelector(".game__player--2");
+
+      player1Div.classList.remove("game__player--active");
+      player2Div.classList.remove("game__player--active");
+
+      if (activePlayer.name === player1.name) {
+        player1Div.classList.add("game__player--active");
+      }
+      if (activePlayer.name === player2.name) {
+        player2Div.classList.add("game__player--active");
+      }
+    }
+
+    toggleActivePlayerBorder();
+
+    // This is used when the game has ended
+    function removeActivePlayerBorder() {
+      const player1Div = document.querySelector(".game__player--1");
+      const player2Div = document.querySelector(".game__player--2");
+
+      player1Div.classList.remove("game__player--active");
+      player2Div.classList.remove("game__player--active");
+    }
+
     if (roundWinner !== null) {
       GamePopup.showGamePopup(`${roundWinner.name} wins!`);
 
@@ -296,13 +325,15 @@ function ScreenController() {
           abortGame.remove();
           playAgain.remove();
           controller.resetWinner();
-
+          toggleActivePlayerBorder();
           GamePopup.startGame();
         });
       }, 2000);
     }
 
     function displayPlayAgainScreen() {
+      removeActivePlayerBorder();
+
       const board = document.querySelector(".board");
       hideChildElements(board);
 
