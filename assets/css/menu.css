@@ -51,15 +51,14 @@ button {
 /* Options Header */
 .options__header {
   width: 100%;
-  border: 1px solid red;
   display: flex;
   gap: var(--spacing-sm);
 }
 
 .options__header-icon {
   grid-area: icon;
-  width: 64px;
-  height: 64px;
+  width: 96px;
+  height: auto;
 }
 
 .options__headline--main {
