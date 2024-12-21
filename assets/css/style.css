@@ -1,20 +1,9 @@
 @import url("./global.css");
 
 body {
-  font-size: var(--font-size-lg);
-  font-family: "Inter", serif;
-  font-weight: var(--font-weight-regular);
-
-  background: var(--color-background);
-
-  color: var(--color-text);
-
   display: grid;
   place-items: center;
-
-  min-height: 100vh;
 }
-
 button {
   border: 0;
   cursor: pointer;

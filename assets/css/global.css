@@ -26,6 +26,18 @@
   box-sizing: border-box;
 }
 
+body {
+  font-size: var(--font-size-lg);
+  font-family: "Inter", serif;
+  font-weight: var(--font-weight-regular);
+
+  background: var(--color-background);
+
+  color: var(--color-text);
+
+  min-height: 100vh;
+}
+
 :root {
   /* Colors */
   --color-primary: #101b27;
