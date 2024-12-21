@@ -282,6 +282,9 @@ function ScreenController() {
       boardDiv.appendChild(rowDiv);
     });
 
+    const abortGame = document.querySelector(".abort-game-btn");
+    abortGame.addEventListener("click", navigateToMenu);
+
     function toggleActivePlayerBorder() {
       const activePlayer = controller.getActivePlayer();
       const player1Div = document.querySelector(".game__player--1");
@@ -299,6 +302,11 @@ function ScreenController() {
     }
 
     toggleActivePlayerBorder();
+
+    function navigateToMenu() {
+      const menuPage = "../index.html";
+      window.location.href = menuPage;
+    }
 
     // This is used when the game has ended
     function removeActivePlayerBorder() {
@@ -319,7 +327,6 @@ function ScreenController() {
         displayPlayAgainScreen();
 
         const playAgain = document.querySelector(".board__play-again");
-        const abortGame = document.querySelector(".board__abort-game");
         playAgain.addEventListener("click", () => {
           const board = document.querySelector(".board");
           board.removeAttribute("style");
@@ -331,6 +338,10 @@ function ScreenController() {
           toggleActivePlayerBorder();
           GamePopup.startGame();
         });
+
+        // HACK: Duplicate responsiility with the other abortGame variable above this function
+        const abortGame = document.querySelector(".abort-game-btn");
+        abortGame.addEventListener("click", navigateToMenu);
       }, 2000);
     }
 
@@ -356,7 +367,7 @@ function ScreenController() {
       );
 
       const abortGame = createButtonElement(
-        ["board__abort-game", "ghost-btn"],
+        ["board__abort-game", "ghost-btn", "abort-game-btn"],
         "Abort game"
       );
 
