@@ -89,7 +89,15 @@ button {
   background-color: var(--color-btn-primary);
 }
 
+.options__btn--primary:hover {
+  background-color: var(--color-btn-primary-hover);
+}
 .options__btn--ghost {
   background-color: var(--color-btn-ghost);
   border: var(--border-btn-default);
+}
+
+.options__btn--ghost:hover {
+  border: var(--border-default);
+  background-color: var(--color-secondary);
 }

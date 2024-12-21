@@ -45,7 +45,9 @@ body {
   --color-btn-primary-text: #ffff;
   --color-border: #6b7885;
   --color-btn-primary: var(--color-mark-x);
+  --color-btn-primary-hover: #1fd8b3;
   --color-btn-ghost: var(--color-primary);
+  --color-btn-ghost-hover: #2c3e50;
 
   /* (Mark Colors) */
   --color-mark-x: #18bc9c;
