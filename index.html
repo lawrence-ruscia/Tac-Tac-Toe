@@ -63,12 +63,51 @@
         </div>
       </div>
     </div>
+    <dialog id="modal">
+      <div class="modal__body">
+        <div class="modal__header">
+          <p class="modal__header-title">Who are you?</p>
+          <button class="exit-button">X</button>
+        </div>
+
+        <form method="dialog" id="modalForm">
+          <label for="player1Name" class="modalForm__label">
+            <span>Player 1</span>
+            <input
+              type="text"
+              id="player1Name"
+              class="modalForm__input modalForm__input--player1"
+              required
+              placeholder="Player 1 name"
+            />
+          </label>
+
+          <label for="player2Name" class="modalForm__label">
+            <span>Player 2</span>
+            <input
+              type="text"
+              id="player2Name"
+              class="modalForm__input modalForm__input--player1"
+              required
+              placeholder="Player 2 name"
+            />
+          </label>
+        </form>
+
+        <div class="modal__footer">
+          <button class="modal__footer-btn">
+            <span>Continue</span>
+            <img class="modal__footer-btn-icon" src="" alt="" />
+          </button>
+        </div>
+      </div>
+    </dialog>
     <script>
       document
         .querySelector("#play-with-a-friend")
         .addEventListener("click", () => {
-          const page = "./pages/game.html";
-          window.location.href = page;
+          const menuModal = document.querySelector("#modal");
+          menuModal.showModal();
         });
     </script>
   </body>
