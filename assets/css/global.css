@@ -1,20 +1,18 @@
 @font-face {
   font-family: "Inter";
-  src: url("./assets/fonts/fonts/Inter-VariableFontopszwght.eot");
-  src: url("./assets/fonts/fonts/Inter-VariableFontopszwght.eot?#iefix")
+  src: url("../fonts/Inter-VariableFontopszwght.eot");
+  src: url("..fonts/Inter-VariableFontopszwght.eot?#iefix")
       format("embedded-opentype"),
-    url("./assets/fonts/fonts/Inter-VariableFontopszwght.woff2") format("woff2"),
-    url("./assets/fonts/fonts/Inter-VariableFontopszwght.woff") format("woff"),
-    url("./assets/fonts/fonts/Inter-VariableFontopszwght.ttf")
-      format("truetype"),
-    url("./assets/fonts/fonts/Inter-VariableFontopszwght.svg#Inter")
-      format("svg");
+    url("../fonts/fonts/Inter-VariableFontopszwght.woff2") format("woff2"),
+    url("../fonts/fonts/Inter-VariableFontopszwght.woff") format("woff"),
+    url("../fonts/fonts/Inter-VariableFontopszwght.ttf") format("truetype"),
+    url("../fonts/fonts/Inter-VariableFontopszwght.svg#Inter") format("svg");
 }
 
 @font-face {
   font-family: "Jungle Adventurer";
-  src: url("./assets/fonts/JungleAdventurerRegular.woff2") format("woff2"),
-    url("./assets/fonts/JungleAdventurerRegular.woff") format("woff");
+  src: url("../fonts/JungleAdventurerRegular.woff2") format("woff2"),
+    url("../fonts/JungleAdventurerRegular.woff") format("woff");
   font-weight: normal;
   font-style: normal;
   font-display: swap;
