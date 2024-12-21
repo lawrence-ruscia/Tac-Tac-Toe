@@ -45,7 +45,7 @@ button {
   flex-direction: column;
   justify-content: start;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xl);
 }
 
 /* Options Header */
@@ -83,10 +83,37 @@ button {
   font-weight: var(--font-weight-bold);
   border-radius: var(--radius-small);
   color: var(--color-btn-primary-text);
+
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .options__btn--primary {
   background-color: var(--color-btn-primary);
+}
+
+.options__btn-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.options__btn-text--title {
+  margin: 0;
+  width: fit-content;
+  font-size: var(--font-size-xl);
+}
+
+.options__btn-text--description {
+  margin-bottom: 0;
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-md);
+}
+
+.options__btn-icon {
+  width: 64px;
+  height: auto;
 }
 
 .options__btn--primary:hover {
