@@ -237,7 +237,10 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
 }
 
 function ScreenController() {
-  const controller = GameController("Lawrence", "Robot");
+  const player1Name = localStorage.getItem("player1Name");
+  const player2Name = localStorage.getItem("player2Name");
+
+  const controller = GameController(player1Name, player2Name);
   const boardDiv = document.querySelector(".board");
   const player1scorePara = document.querySelector("#player1Score");
   const player2scorePara = document.querySelector("#player2Score");

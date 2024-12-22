@@ -118,16 +118,18 @@
           ".modalForm__input--player2"
         );
 
-        function openModal() {
-          menuModal.showModal();
-        }
+        function formSubmissionHandler() {
+          modalForm.addEventListener("submit", () => {
+            const player1Name = player1Input.value;
+            const player2Name = player2Input.value;
 
-        function toggleContinueBtn() {
-          if (player1Input.validity.valid && player2Input.validity.valid) {
-            continueBtn.disabled = false;
-          } else {
-            continueBtn.disabled = true;
-          }
+            localStorage.setItem("player1Name", player1Name);
+            localStorage.setItem("player2Name", player2Name);
+          });
+
+          continueBtn.addEventListener("click", () => {
+            window.location.href = "./pages/game.html";
+          });
         }
 
         function StyleHandler() {
@@ -164,6 +166,18 @@
           return { handleInputEventStyle, handleBlurEventStyle };
         }
 
+        function openModal() {
+          menuModal.showModal();
+        }
+
+        function toggleContinueBtn() {
+          if (player1Input.validity.valid && player2Input.validity.valid) {
+            continueBtn.disabled = false;
+          } else {
+            continueBtn.disabled = true;
+          }
+        }
+
         function init() {
           document
             .querySelector("#play-with-a-friend")
@@ -174,6 +188,8 @@
 
           styleHandler.handleInputEventStyle();
           styleHandler.handleBlurEventStyle();
+
+          formSubmissionHandler();
         }
         return { init };
       }
