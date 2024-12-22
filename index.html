@@ -74,30 +74,32 @@
 
         <form method="dialog" id="modalForm">
           <label for="player1Name" class="modalForm__label">
-            <span>Player 1</span>
+            <span>Player 1 *</span>
             <input
               type="text"
               id="player1Name"
               class="modalForm__input modalForm__input--player1"
               required
               placeholder="Player 1 name"
+              minlength="3"
             />
           </label>
 
           <label for="player2Name" class="modalForm__label">
-            <span>Player 2</span>
+            <span>Player 2 *</span>
             <input
               type="text"
               id="player2Name"
-              class="modalForm__input modalForm__input--player1"
+              class="modalForm__input modalForm__input--player2"
               required
               placeholder="Player 2 name"
+              minlength="3"
             />
           </label>
         </form>
 
         <div class="modal__footer">
-          <button class="modal__footer-btn">
+          <button class="modal__footer-btn" form="modalForm">
             <span>Continue</span>
             <img class="modal__footer-btn-icon" src="" alt="" />
           </button>
@@ -105,12 +107,79 @@
       </div>
     </dialog>
     <script>
-      document
-        .querySelector("#play-with-a-friend")
-        .addEventListener("click", () => {
-          const menuModal = document.querySelector("#modal");
+      function ModalController() {
+        const menuModal = document.querySelector("#modal");
+        const modalForm = document.querySelector("#modalForm");
+        const continueBtn = document.querySelector(".modal__footer-btn");
+        const player1Input = document.querySelector(
+          ".modalForm__input--player1"
+        );
+        const player2Input = document.querySelector(
+          ".modalForm__input--player2"
+        );
+
+        function openModal() {
           menuModal.showModal();
-        });
+        }
+
+        function toggleContinueBtn() {
+          if (player1Input.validity.valid && player2Input.validity.valid) {
+            continueBtn.disabled = false;
+          } else {
+            continueBtn.disabled = true;
+          }
+        }
+
+        function StyleHandler() {
+          const handleInputEventStyle = () => {
+            modalForm.addEventListener("input", (e) => {
+              toggleContinueBtn();
+
+              const input = e.target;
+              const parentLabel = input.parentNode;
+
+              if (input.validity.valid) {
+                input.style.border = "1px solid var(--color-mark-x)";
+                parentLabel.style.color = "var(--color-mark-x)";
+              } else {
+                input.style.border = "1px solid var(--color-mark-o)";
+                parentLabel.style.color = "var(--color-mark-o)";
+              }
+            });
+          };
+
+          const handleBlurEventStyle = () => {
+            modalForm.addEventListener(
+              "blur",
+              (e) => {
+                const input = e.target;
+
+                input.style.border = "";
+                input.parentNode.style.color = "";
+              },
+              true
+            );
+          };
+
+          return { handleInputEventStyle, handleBlurEventStyle };
+        }
+
+        function init() {
+          document
+            .querySelector("#play-with-a-friend")
+            .addEventListener("click", openModal);
+          toggleContinueBtn();
+
+          const styleHandler = StyleHandler();
+
+          styleHandler.handleInputEventStyle();
+          styleHandler.handleBlurEventStyle();
+        }
+        return { init };
+      }
+
+      const modalController = ModalController();
+      modalController.init();
     </script>
   </body>
 </html>
