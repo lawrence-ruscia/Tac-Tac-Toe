@@ -124,6 +124,7 @@ input[type="text"] {
 .options__btn--primary:hover {
   background-color: var(--color-btn-primary-hover);
 }
+
 .options__btn--ghost {
   background-color: var(--color-btn-ghost);
   border: var(--border-btn-default);
@@ -238,4 +239,24 @@ input[type="text"] {
   justify-content: end;
 
   background-color: var(--color-primary);
+}
+
+.modal__footer-btn {
+  padding: var(--padding-btn-sm);
+  border-radius: var(--radius-small);
+
+  background-color: var(--color-btn-primary);
+  color: var(--color-btn-primary-text);
+
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.modal__footer-btn:hover {
+  background-color: var(--color-btn-primary-hover);
+}
+
+.modal__footer-btn:disabled {
+  background-color: var(--color-btn-primary-disabled);
+  color: var(--color-btn-primary-text-disabled);
 }
