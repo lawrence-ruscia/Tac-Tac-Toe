@@ -111,6 +111,10 @@
         const menuModal = document.querySelector("#modal");
         const modalForm = document.querySelector("#modalForm");
         const continueBtn = document.querySelector(".modal__footer-btn");
+        const exitBtn = document.querySelector(".modal__header-exit");
+        const playerWithFriendBtn = document.querySelector(
+          "#play-with-a-friend"
+        );
         const player1Input = document.querySelector(
           ".modalForm__input--player1"
         );
@@ -170,6 +174,11 @@
           menuModal.showModal();
         }
 
+        function closeModal() {
+          menuModal.close();
+          modalForm.reset();
+        }
+
         function toggleContinueBtn() {
           if (player1Input.validity.valid && player2Input.validity.valid) {
             continueBtn.disabled = false;
@@ -179,13 +188,12 @@
         }
 
         function init() {
-          document
-            .querySelector("#play-with-a-friend")
-            .addEventListener("click", openModal);
+          playerWithFriendBtn.addEventListener("click", openModal);
+          exitBtn.addEventListener("click", closeModal);
+
           toggleContinueBtn();
 
           const styleHandler = StyleHandler();
-
           styleHandler.handleInputEventStyle();
           styleHandler.handleBlurEventStyle();
 
