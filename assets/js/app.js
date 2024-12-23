@@ -236,246 +236,90 @@ function GameController(playerOne = "Player 1", playerTwo = "Player 2") {
   };
 }
 
-// OPTIMIZE: Provide a better implementation for this function,
-//            make sure to use factory functions and module pattern to encapsulate data
 const ScreenController = (() => {
+  const DOMElements = {
+    boardDiv: document.querySelector(".board"),
+    player1scorePara: document.querySelector("#player1Score"),
+    player2scorePara: document.querySelector("#player2Score"),
+    player1NamePara: document.querySelector(".player__name--1"),
+    player2NamePara: document.querySelector(".player__name--2"),
+    player1Div: document.querySelector(".game__player--1"),
+    player2Div: document.querySelector(".game__player--2"),
+  };
+
   const player1Name = localStorage.getItem("player1Name");
   const player2Name = localStorage.getItem("player2Name");
 
   const controller = GameController(player1Name, player2Name);
-  const boardDiv = document.querySelector(".board");
-  const player1scorePara = document.querySelector("#player1Score");
-  const player2scorePara = document.querySelector("#player2Score");
-  const player1NamePara = document.querySelector(".player__name--1");
-  const player2NamePara = document.querySelector(".player__name--2");
-  player1NamePara.textContent = controller.getPlayerOne().name;
-  player2NamePara.textContent = controller.getPlayerTwo().name;
 
   const GamePopupHandler = (() => {
     const showGamePopup = (message) => {
       const popup = document.getElementById("gamePopup");
+      const TIMEOUT_DURATION = 2000;
       popup.textContent = message; // Set the popup text
       popup.classList.add("show");
 
       // Hide the popup after 2 seconds
       setTimeout(() => {
         popup.classList.remove("show");
-      }, 2000);
+      }, TIMEOUT_DURATION);
     };
 
     const startGame = () => {
-      // Initialize game state, board, players, etc.
       showGamePopup("Game Started!");
 
-      // Additional game start logic
       console.log("Game initialized!");
     };
 
     return { showGamePopup, startGame };
   })();
 
-  const updateScreen = () => {
-    // get the newest version of the board and player turn
+  const BoardHandler = (() => {
     const board = controller.getBoard();
 
-    const player1 = controller.getPlayerOne();
-    const player2 = controller.getPlayerTwo();
-    const roundWinner = controller.getWinner();
+    const clearBoard = () => {
+      DOMElements.boardDiv.innerHTML = "";
+    };
 
-    const BoardHandler = (() => {
-      const clearBoard = () => {
-        boardDiv.innerHTML = "";
-      };
+    const updatePlayerScores = () => {
+      // NOTE: This is so that it gets the latest data about the players
+      const player1 = controller.getPlayerOne();
+      const player2 = controller.getPlayerTwo();
 
-      const updatePlayerScores = () => {
-        player1scorePara.textContent = player1.score;
-        player2scorePara.textContent = player2.score;
-      };
+      DOMElements.player1scorePara.textContent = player1.score;
+      DOMElements.player2scorePara.textContent = player2.score;
+    };
 
-      const buildBoard = () => {
-        board.forEach((row, rowIndex) => {
-          const rowDiv = document.createElement("div");
-          rowDiv.className = "board__row";
+    const buildBoard = () => {
+      board.forEach((row, rowIndex) => {
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "board__row";
 
-          row.forEach((cell, cellIndex) => {
-            const cellBtn = document.createElement("button");
-            cellBtn.className =
-              cell.getValue() === "X"
-                ? " board__cell cell--x"
-                : "board__cell cell--o";
+        row.forEach((cell, cellIndex) => {
+          const cellBtn = document.createElement("button");
+          cellBtn.className =
+            cell.getValue() === "X"
+              ? " board__cell cell--x"
+              : "board__cell cell--o";
 
-            const nbsp = "\u00A0"; // non-breaking space
-            cellBtn.textContent =
-              cell.getValue() === "E" ? nbsp : cell.getValue();
+          const nbsp = "\u00A0"; // non-breaking space
+          cellBtn.textContent =
+            cell.getValue() === "E" ? nbsp : cell.getValue();
 
-            cellBtn.dataset.row = rowIndex;
-            cellBtn.dataset.col = cellIndex;
+          cellBtn.dataset.row = rowIndex;
+          cellBtn.dataset.col = cellIndex;
 
-            rowDiv.appendChild(cellBtn);
-          });
-          boardDiv.appendChild(rowDiv);
+          rowDiv.appendChild(cellBtn);
         });
+        DOMElements.boardDiv.appendChild(rowDiv);
+      });
 
-        // Include abort game btn to board
-        ButtonEventHandler.abortGameHandler();
-      };
+      // Include abort game btn to board
+      ButtonEventHandler.abortGameHandler();
+    };
 
-      return { clearBoard, updatePlayerScores, buildBoard };
-    })();
-
-    const ButtonEventHandler = (() => {
-      const boardDiv = document.querySelector(".board");
-
-      function displayChildElements(element) {
-        const children = element.children;
-
-        for (const child of children) {
-          child.removeAttribute("style"); // Resets to its original position
-        }
-      }
-
-      function navigateToMenu() {
-        const menuPage = "../index.html";
-        window.location.href = menuPage;
-      }
-
-      const abortGameHandler = () => {
-        const abortGame = document.querySelector(".abort-game-btn");
-        abortGame.addEventListener("click", navigateToMenu);
-      };
-
-      const playAgainHandler = () => {
-        const playAgain = document.querySelector(".board__play-again");
-        const abortGame = document.querySelector(".abort-game-btn");
-        playAgain.addEventListener("click", () => {
-          boardDiv.removeAttribute("style");
-
-          displayChildElements(boardDiv);
-          abortGame.remove();
-          playAgain.remove();
-          controller.resetWinner();
-          PlayerBorderStyleHandler.toggleActivePlayerBorder();
-          GamePopupHandler.startGame();
-        });
-      };
-
-      return { abortGameHandler, playAgainHandler };
-    })();
-
-    const PlayerBorderStyleHandler = (() => {
-      const toggleActivePlayerBorder = () => {
-        const activePlayer = controller.getActivePlayer();
-        const player1Div = document.querySelector(".game__player--1");
-        const player2Div = document.querySelector(".game__player--2");
-
-        player1Div.classList.remove("game__player--active");
-        player2Div.classList.remove("game__player--active");
-
-        if (activePlayer.name === player1.name) {
-          player1Div.classList.add("game__player--active");
-        }
-        if (activePlayer.name === player2.name) {
-          player2Div.classList.add("game__player--active");
-        }
-      };
-
-      const removeActivePlayerBorder = () => {
-        const player1Div = document.querySelector(".game__player--1");
-        const player2Div = document.querySelector(".game__player--2");
-
-        player1Div.classList.remove("game__player--active");
-        player2Div.classList.remove("game__player--active");
-      };
-
-      return { toggleActivePlayerBorder, removeActivePlayerBorder };
-    })();
-
-    const PlayAgainHandler = (() => {
-      function setElementStyles(element, styleObj) {
-        Object.assign(element.style, styleObj);
-      }
-
-      function hideChildElements(element) {
-        const children = element.children;
-
-        for (const child of children) {
-          child.style.position = "absolute";
-          child.style.top = "-9999px";
-        }
-      }
-
-      function createButtonElement(classArr, textContent = "Button") {
-        const button = document.createElement("button");
-        for (const classItem of classArr) {
-          button.classList.add(classItem);
-        }
-        button.textContent = textContent;
-
-        return button;
-      }
-
-      function appendToBoard() {
-        PlayerBorderStyleHandler.removeActivePlayerBorder();
-
-        const board = document.querySelector(".board");
-        hideChildElements(board);
-
-        const boardStyle = {
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "var(--spacing-sm)",
-        };
-
-        setElementStyles(board, boardStyle);
-
-        const playAgain = createButtonElement(
-          ["board__play-again"],
-          "Play again!"
-        );
-
-        const abortGame = createButtonElement(
-          ["board__abort-game", "ghost-btn", "abort-game-btn"],
-          "Abort game"
-        );
-
-        board.appendChild(playAgain);
-        board.appendChild(abortGame);
-      }
-
-      const displayToScreen = () => {
-        if (roundWinner !== null) {
-          const message =
-            roundWinner === "Draw" ? "Draw!" : `${roundWinner.name} wins!`;
-
-          GamePopupHandler.showGamePopup(message);
-
-          setTimeout(() => {
-            appendToBoard();
-            ButtonEventHandler.playAgainHandler();
-            ButtonEventHandler.abortGameHandler();
-          }, 2000);
-        }
-      };
-
-      return { displayToScreen };
-    })();
-
-    function initBoard() {
-      BoardHandler.clearBoard();
-      BoardHandler.updatePlayerScores();
-      BoardHandler.buildBoard();
-      PlayAgainHandler.displayToScreen();
-    }
-
-    // Initialize board
-    initBoard();
-  };
-
-  const initializeGame = () => {
     const handleCellClick = () => {
-      boardDiv.addEventListener("click", (e) => {
+      DOMElements.boardDiv.addEventListener("click", (e) => {
         const cell = e.target;
         const selectedCellCol = Number(cell.dataset.col);
         const selectedCellRow = Number(cell.dataset.row);
@@ -489,15 +333,179 @@ const ScreenController = (() => {
       });
     };
 
-    function handleContentLoad() {
-      // Initialize events
-      document.addEventListener("DOMContentLoaded", () => {
-        handleCellClick();
-        GamePopupHandler.startGame();
-      });
+    return { clearBoard, updatePlayerScores, buildBoard, handleCellClick };
+  })();
+
+  const ButtonEventHandler = (() => {
+    function displayChildElements(element) {
+      const children = element.children;
+
+      for (const child of children) {
+        child.removeAttribute("style"); // Resets to its original position
+      }
     }
 
-    handleContentLoad();
+    function navigateToMenu() {
+      const menuPage = "../index.html";
+      window.location.href = menuPage;
+    }
+
+    const abortGameHandler = () => {
+      const abortGame = document.querySelector(".abort-game-btn");
+      abortGame.addEventListener("click", navigateToMenu);
+    };
+
+    const playAgainHandler = () => {
+      const playAgain = document.querySelector(".board__play-again");
+      const abortGame = document.querySelector(".abort-game-btn");
+      playAgain.addEventListener("click", () => {
+        const boardDiv = DOMElements.boardDiv;
+        boardDiv.removeAttribute("style");
+
+        displayChildElements(boardDiv);
+        abortGame.remove();
+        playAgain.remove();
+        controller.resetWinner();
+        PlayerBorderStyleHandler.toggleActivePlayerBorder();
+        GamePopupHandler.startGame();
+      });
+    };
+
+    return { abortGameHandler, playAgainHandler };
+  })();
+
+  const PlayerBorderStyleHandler = (() => {
+    const toggleActivePlayerBorder = () => {
+      const activePlayer = controller.getActivePlayer();
+
+      const player1 = controller.getPlayerOne();
+      const player2 = controller.getPlayerTwo();
+
+      DOMElements.player1Div.classList.remove("game__player--active");
+      DOMElements.player2Div.classList.remove("game__player--active");
+
+      if (activePlayer.name === player1.name) {
+        DOMElements.player1Div.classList.add("game__player--active");
+      }
+      if (activePlayer.name === player2.name) {
+        DOMElements.player2Div.classList.add("game__player--active");
+      }
+    };
+
+    const removeActivePlayerBorder = () => {
+      DOMElements.player1Div.classList.remove("game__player--active");
+      DOMElements.player2Div.classList.remove("game__player--active");
+    };
+
+    return { toggleActivePlayerBorder, removeActivePlayerBorder };
+  })();
+
+  const PlayAgainHandler = (() => {
+    function setElementStyles(element, styleObj) {
+      Object.assign(element.style, styleObj);
+    }
+
+    function hideChildElements(element) {
+      const children = element.children;
+
+      for (const child of children) {
+        child.style.position = "absolute";
+        child.style.top = "-9999px";
+      }
+    }
+
+    function createButtonElement(classArr, textContent = "Button") {
+      const button = document.createElement("button");
+      for (const classItem of classArr) {
+        button.classList.add(classItem);
+      }
+      button.textContent = textContent;
+
+      return button;
+    }
+
+    function appendToBoard() {
+      PlayerBorderStyleHandler.removeActivePlayerBorder();
+
+      const boardDiv = DOMElements.boardDiv;
+      hideChildElements(boardDiv);
+
+      const boardStyle = {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "var(--spacing-sm)",
+      };
+
+      setElementStyles(boardDiv, boardStyle);
+
+      const playAgain = createButtonElement(
+        ["board__play-again"],
+        "Play again!"
+      );
+
+      const abortGame = createButtonElement(
+        ["board__abort-game", "ghost-btn", "abort-game-btn"],
+        "Abort game"
+      );
+
+      boardDiv.appendChild(playAgain);
+      boardDiv.appendChild(abortGame);
+    }
+
+    const displayToScreen = (message) => {
+      GamePopupHandler.showGamePopup(message);
+
+      setTimeout(() => {
+        appendToBoard();
+        ButtonEventHandler.playAgainHandler();
+        ButtonEventHandler.abortGameHandler();
+      }, 2000);
+    };
+
+    return { displayToScreen };
+  })();
+
+  const updateScreen = () => {
+    const updateScores = () => {
+      DOMElements.player1NamePara.textContent = controller.getPlayerOne().name;
+      DOMElements.player2NamePara.textContent = controller.getPlayerTwo().name;
+    };
+
+    const refreshBoard = () => {
+      BoardHandler.clearBoard();
+      BoardHandler.updatePlayerScores();
+      BoardHandler.buildBoard();
+      PlayerBorderStyleHandler.toggleActivePlayerBorder();
+    };
+
+    function handleWinnerDisplay() {
+      const roundWinner = controller.getWinner();
+      if (roundWinner !== null) {
+        const message =
+          roundWinner === "Draw" ? "Draw!" : `${roundWinner.name} wins!`;
+
+        PlayAgainHandler.displayToScreen(message);
+      }
+    }
+
+    // Initialize board
+    updateScores();
+    refreshBoard();
+    handleWinnerDisplay();
+  };
+
+  const initializeGame = () => {
+    const bindEventHandlers = () => {
+      BoardHandler.handleCellClick();
+    };
+
+    document.addEventListener("DOMContentLoaded", () => {
+      bindEventHandlers();
+      GamePopupHandler.startGame();
+    });
+
     updateScreen();
   };
 
