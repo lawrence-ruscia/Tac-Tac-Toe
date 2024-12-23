@@ -375,19 +375,28 @@ const ScreenController = (() => {
   })();
 
   const PlayerBorderStyleHandler = (() => {
+    function areObjectsEqual(obj1, obj2) {
+      const keys1 = Object.keys(obj1);
+      const keys2 = Object.keys(obj2);
+
+      if (keys1.length !== keys2.length) return false;
+
+      return keys1.every(
+        (key) => obj2.hasOwnProperty(key) && obj1[key] === obj2[key]
+      );
+    }
+
     const toggleActivePlayerBorder = () => {
       const activePlayer = controller.getActivePlayer();
-
       const player1 = controller.getPlayerOne();
       const player2 = controller.getPlayerTwo();
 
-      DOMElements.player1Div.classList.remove("game__player--active");
-      DOMElements.player2Div.classList.remove("game__player--active");
+      removeActivePlayerBorder();
 
-      if (activePlayer.name === player1.name) {
+      if (areObjectsEqual(activePlayer, player1)) {
         DOMElements.player1Div.classList.add("game__player--active");
       }
-      if (activePlayer.name === player2.name) {
+      if (areObjectsEqual(activePlayer, player2)) {
         DOMElements.player2Div.classList.add("game__player--active");
       }
     };
