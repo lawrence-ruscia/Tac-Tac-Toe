@@ -124,8 +124,8 @@ button {
 
 /* Board  elements*/
 .board {
-  width: 600px;
-  height: 600px;
+  width: 450px;
+  height: 450px;
 
   display: grid;
   justify-content: center;
@@ -153,8 +153,8 @@ button {
   background-color: var(--color-primary);
 
   border: none;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
   text-align: center;
   font-size: 12rem;
   font-weight: var(--font-weight-medium);
