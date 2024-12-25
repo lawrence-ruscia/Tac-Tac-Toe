@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Play Tic Tac Toe</title>
     <link rel="stylesheet" href="assets/css/normalize.css" />
+    <link rel="icon" href="./assets/icons/game-icon.svg" type="images/x-icon" />
     <link rel="stylesheet" href="assets/css/menu.css" />
   </head>
   <body>
@@ -129,6 +130,7 @@
 
             localStorage.setItem("player1Name", player1Name);
             localStorage.setItem("player2Name", player2Name);
+            localStorage.setItem("gameType", "PVP");
           });
 
           continueBtn.addEventListener("click", () => {
@@ -202,8 +204,17 @@
         return { init };
       }
 
+      const PlayVsBotHandler = () => {
+        const playVsBotBtn = document.querySelector("#play-vs-bot");
+        playVsBotBtn.addEventListener("click", () => {
+          window.location.href = "./pages/game.html";
+          localStorage.setItem("gameType", "PVR");
+        });
+      };
+
       const modalController = ModalController();
       modalController.init();
+      PlayVsBotHandler();
     </script>
   </body>
 </html>
