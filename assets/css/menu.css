@@ -136,8 +136,8 @@ input[type="text"] {
 }
 
 #modal {
-  width: 30%;
-  height: 40vh;
+  width: 50vh;
+  height: 50vh;
   padding: 0;
   border: 0;
 }
@@ -242,7 +242,7 @@ input[type="text"] {
 }
 
 .modal__footer-btn {
-  padding: var(--padding-btn-sm);
+  padding: var(--padding-btn-md);
   border-radius: var(--radius-small);
 
   background-color: var(--color-btn-primary);
