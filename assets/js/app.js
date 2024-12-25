@@ -433,7 +433,7 @@ const ScreenController = (() => {
       return button;
     }
 
-    function appendToBoard() {
+    function appendPostGameElementsToBoard() {
       PlayerBorderStyleHandler.removeActivePlayerBorder();
 
       const boardDiv = DOMElements.boardDiv;
@@ -467,7 +467,7 @@ const ScreenController = (() => {
       GamePopupHandler.showGamePopup(message);
 
       setTimeout(() => {
-        appendToBoard();
+        appendPostGameElementsToBoard();
         ButtonEventHandler.playAgainHandler();
         ButtonEventHandler.abortGameHandler();
       }, 2000);
