@@ -38,6 +38,7 @@ button {
   font-size: 5rem;
   font-weight: bold;
   letter-spacing: 3px;
+  -webkit-text-stroke: 1px black;
   text-align: center;
   opacity: 0; /* Hidden by default */
   visibility: hidden; /* Prevent interaction when hidden */
