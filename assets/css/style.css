@@ -124,44 +124,50 @@ button {
 
 /* Board  elements*/
 .board {
-  width: 600px;
-  height: 600px;
+  width: 750px;
+  height: 750px;
 
   display: grid;
   justify-content: center;
   align-content: center;
-  grid-template-rows: repeat(3, auto);
-
+  grid-template-rows: repeat(3, 250px);
+  grid-template-columns: 1fr;
   padding: 3.5rem;
 }
 
 .board__row {
-  width: 100%;
-  height: 100%;
-
   display: grid;
   grid-template-rows: 1fr;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, auto);
   place-items: center;
-}
-
-.board__row:not(:last-child) {
-  border-bottom: var(--board-separator);
 }
 
 .board__cell {
   background-color: var(--color-primary);
 
-  border: none;
-  width: 200px;
-  height: 200px;
-  text-align: center;
+  width: 250px;
+  height: 250px;
   font-size: 175px;
+  text-align: center;
   font-weight: var(--font-weight-medium);
+
+  border: var(--board-separator);
 }
 
-.board__cell:not(:last-child) {
-  border-right: var(--board-separator);
+.board__row:first-child .board__cell {
+  border-top: none;
+}
+
+.board__row:last-child .board__cell {
+  border-bottom: none;
+}
+
+.board__row .board__cell:first-child {
+  border-left: none;
+}
+
+.board__row .board__cell:last-child {
+  border-right: none;
 }
 
 .cell--x {

@@ -78,7 +78,7 @@ body {
   --radius-round: 50%;
 
   /* Board Separator */
-  --board-separator: 18px solid var(--color-border);
+  --board-separator: 8px solid var(--color-border);
 
   /* Border */
   --border-default: 1px solid #6b78854b;
