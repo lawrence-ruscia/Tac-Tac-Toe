@@ -136,10 +136,15 @@ input[type="text"] {
 }
 
 #modal {
-  width: 50vh;
-  height: 50vh;
+  width: 500px;
+  height: 400px;
   padding: 0;
   border: 0;
+  border-radius: var(--radius-small);
+}
+
+#modal::backdrop {
+  background-color: rgba(255, 255, 255, 0.2); /* White-ish backdrop */
 }
 
 .modal__body {
